@@ -6,11 +6,14 @@ const useStore = create(
   persist(
     (set) => ({
       user: null, // null if not logged in
+      hasPremium: false,
       emotionalRecords: [],
       testResults: [],
 
       login: (name) => set({ user: { name } }),
-      logout: () => set({ user: null, emotionalRecords: [], testResults: [] }),
+      logout: () => set({ user: null, emotionalRecords: [], testResults: [], hasPremium: false }),
+      
+      subscribeToPremium: () => set({ hasPremium: true }),
 
       addEmotionalRecord: (record) => set((state) => ({
         emotionalRecords: [...state.emotionalRecords, record]

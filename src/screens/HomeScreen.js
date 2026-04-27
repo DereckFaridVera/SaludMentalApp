@@ -16,6 +16,8 @@ const quotes = [
 export default function HomeScreen() {
   const user = useStore((state) => state.user);
   const logout = useStore((state) => state.logout);
+  const hasPremium = useStore((state) => state.hasPremium);
+  const subscribeToPremium = useStore((state) => state.subscribeToPremium);
   const emotionalRecords = useStore((state) => state.emotionalRecords);
   const navigation = useNavigation();
 
@@ -37,6 +39,19 @@ export default function HomeScreen() {
         }
       ]
     );
+  };
+
+  const handlePremiumPurchase = () => {
+    Alert.alert(
+      "Compra Simulada Exitosa",
+      "¡Felicidades! Has desbloqueado el Chat de Apoyo Psicológico IA.",
+      [{ text: "Aceptar", onPress: () => subscribeToPremium() }]
+    );
+  };
+
+  const openAIChat = () => {
+    setProfileVisible(false);
+    navigation.navigate("AIChat");
   };
 
   // Get a random quote based on current date
@@ -78,6 +93,28 @@ export default function HomeScreen() {
               </View>
               <Text style={styles.profileName}>{user?.name || 'Estudiante'}</Text>
               
+              {!hasPremium ? (
+                <View style={styles.premiumCard}>
+                  <Ionicons name="sparkles" size={32} color={theme.colors.accent} />
+                  <Text style={styles.premiumTitle}>Apoyo Psicológico IA</Text>
+                  <Text style={styles.premiumText}>Desbloquea el chat inteligente 24/7 y recibe contención emocional empática de inmediato.</Text>
+                  <TouchableOpacity style={styles.buyButton} onPress={handlePremiumPurchase}>
+                    <Text style={styles.buyButtonText}>Comprar Plan - $4.99</Text>
+                  </TouchableOpacity>
+                </View>
+              ) : (
+                <View style={styles.premiumActiveCard}>
+                  <Ionicons name="chatbubbles" size={28} color={theme.colors.surface} />
+                  <View style={{ flex: 1, marginLeft: 12 }}>
+                    <Text style={styles.premiumActiveTitle}>Plan Premium Activo</Text>
+                    <Text style={styles.premiumActiveText}>Acceso ilimitado al chat IA</Text>
+                  </View>
+                  <TouchableOpacity style={styles.chatButton} onPress={openAIChat}>
+                    <Text style={styles.chatButtonText}>Entrar</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+
               <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
                 <Ionicons name="log-out-outline" size={24} color={theme.colors.error} />
                 <Text style={styles.logoutText}>Cerrar Sesión</Text>
@@ -319,5 +356,67 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 16,
     marginLeft: theme.spacing.s,
+  },
+  premiumCard: {
+    backgroundColor: '#fffcf2',
+    borderColor: theme.colors.accent,
+    borderWidth: 1,
+    padding: theme.spacing.l,
+    borderRadius: theme.borderRadius.l,
+    width: '100%',
+    alignItems: 'center',
+    marginBottom: theme.spacing.xl,
+  },
+  premiumTitle: {
+    ...theme.typography.h3,
+    color: theme.colors.accent,
+    marginVertical: theme.spacing.s,
+  },
+  premiumText: {
+    ...theme.typography.caption,
+    color: theme.colors.textSecondary,
+    textAlign: 'center',
+    marginBottom: theme.spacing.m,
+  },
+  buyButton: {
+    backgroundColor: theme.colors.accent,
+    paddingVertical: theme.spacing.s,
+    paddingHorizontal: theme.spacing.l,
+    borderRadius: theme.borderRadius.m,
+    width: '100%',
+    alignItems: 'center',
+  },
+  buyButtonText: {
+    color: theme.colors.surface,
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  premiumActiveCard: {
+    flexDirection: 'row',
+    backgroundColor: theme.colors.primary,
+    padding: theme.spacing.m,
+    borderRadius: theme.borderRadius.l,
+    width: '100%',
+    alignItems: 'center',
+    marginBottom: theme.spacing.xl,
+  },
+  premiumActiveTitle: {
+    color: theme.colors.surface,
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  premiumActiveText: {
+    color: theme.colors.surface + 'dd',
+    fontSize: 12,
+  },
+  chatButton: {
+    backgroundColor: theme.colors.surface,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 20,
+  },
+  chatButtonText: {
+    color: theme.colors.primary,
+    fontWeight: 'bold',
   },
 });

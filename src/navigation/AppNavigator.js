@@ -13,6 +13,7 @@ import MoodTrackerScreen from '../screens/MoodTrackerScreen';
 import HistoryScreen from '../screens/HistoryScreen';
 import StressTestScreen from '../screens/StressTestScreen';
 import RelaxationScreen from '../screens/RelaxationScreen';
+import AIChatScreen from '../screens/AIChatScreen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -73,7 +74,10 @@ export default function AppNavigator() {
         {!user ? (
           <Stack.Screen name="Login" component={LoginScreen} />
         ) : (
-          <Stack.Screen name="MainTabs" component={TabNavigator} />
+          <>
+            <Stack.Screen name="MainTabs" component={TabNavigator} />
+            <Stack.Screen name="AIChat" component={AIChatScreen} />
+          </>
         )}
       </Stack.Navigator>
     </NavigationContainer>
